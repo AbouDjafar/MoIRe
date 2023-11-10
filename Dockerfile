@@ -11,7 +11,7 @@ RUN git clone https://github.com/AbouDjafar/MoIRe.git
 WORKDIR /app/MoIRe
 
 # Copie les fichiers requirements.txt dans le conteneur
-COPY . /app
+COPY . /app/MoIRe
 
 # Installe les dépendances
 RUN pip install -r requirements.txt
