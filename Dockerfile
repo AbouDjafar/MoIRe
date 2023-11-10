@@ -11,10 +11,10 @@ RUN git clone https://github.com/AbouDjafar/MoIRe.git
 WORKDIR /app/MoIRe
 
 # Copie les fichiers requirements.txt dans le conteneur
-COPY requirements.txt .
+COPY . /app
 
 # Installe les dépendances
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install -r requirements.txt
 
 # Définit les variables d'environnement
 ENV FLASK_APP=app.py
