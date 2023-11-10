@@ -1,17 +1,20 @@
-# Use the official Python image as the base image
+# Utilise l'image de base Python
 FROM python:3.8
 
-# Set the working directory in the container
+# Définit le répertoire de travail dans le conteneur
 WORKDIR /app
 
-# Copy the application files into the working directory
-COPY . /app
+# Clone le dépôt GitHub contenant ton application Flask
+RUN git clone https://github.com/AbouDjafar/MoIRe.git
 
-# Installer les dépendances de l'application
-RUN pip install -r requirements.txt
+# Déplace-toi dans le répertoire de l'application
+WORKDIR /app/MoIRe
 
-# Definir les points d'entrées du conteneur
-CMD ["flask", "run", "--host=0.0.0.0"]
+# Copie les fichiers requirements.txt dans le conteneur
+COPY requirements.txt .
+
+# Installe les dépendances
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Définit les variables d'environnement
 ENV FLASK_APP=app.py
@@ -19,3 +22,6 @@ ENV FLASK_RUN_HOST=0.0.0.0
 
 # Expose le port sur lequel l'application Flask écoute
 EXPOSE 5000
+
+# Lance l'application Flask
+CMD ["flask", "run"]
