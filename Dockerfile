@@ -7,8 +7,15 @@ WORKDIR /app
 # Copy the application files into the working directory
 COPY . /app
 
-# Install the application dependencies
+# Installer les dépendances de l'application
 RUN pip install -r requirements.txt
 
-# Define the entry point for the container
+# Definir les points d'entrées du conteneur
 CMD ["flask", "run", "--host=0.0.0.0"]
+
+# Définit les variables d'environnement
+ENV FLASK_APP=app.py
+ENV FLASK_RUN_HOST=0.0.0.0
+
+# Expose le port sur lequel l'application Flask écoute
+EXPOSE 5000
