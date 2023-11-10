@@ -10,9 +10,6 @@ RUN git clone https://github.com/AbouDjafar/MoIRe.git
 # Déplace-toi dans le répertoire de l'application
 WORKDIR /app/MoIRe
 
-# Copie les fichiers requirements.txt dans le conteneur
-COPY . /app/MoIRe
-
 # Installe les dépendances
 RUN pip install -r requirements.txt
 
