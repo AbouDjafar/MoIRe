@@ -24,4 +24,4 @@ ENV FLASK_RUN_HOST=0.0.0.0
 EXPOSE 5000
 
 # Lance l'application Flask
-CMD ["flask", "run"]
+CMD ["flask", "run", "--host=0.0.0.0"]
