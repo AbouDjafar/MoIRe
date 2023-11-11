@@ -15,10 +15,14 @@ WORKDIR /app/MoIRe
 
 # Installe les dépendances
 RUN pip install --upgrade pip
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install -r requirements.txt
+
+# Définit les variables d'environnement
+ENV FLASK_APP=app.py
+ENV FLASK_RUN_HOST=0.0.0.0
 
 # Expose le port sur lequel l'application Flask écoute
 EXPOSE 5000
 
 # Lance l'application Flask
-CMD flask run --host 0.0.0.0
+CMD ["flask", "run", "--host=0.0.0.0"]
