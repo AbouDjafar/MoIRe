@@ -14,6 +14,7 @@ RUN git clone https://github.com/AbouDjafar/MoIRe.git
 WORKDIR /app/MoIRe
 
 # Installe les dépendances
+RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Expose le port sur lequel l'application Flask écoute
