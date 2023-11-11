@@ -16,8 +16,6 @@ WORKDIR /app/MoIRe
 # Installe les dépendances
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
-RUN pip uninstall Jinja2
-RUN pip install Jinja2
 
 # Définit les variables d'environnement
 ENV FLASK_APP=app.py
