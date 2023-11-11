@@ -1,28 +1,15 @@
-# Utilise l'image de base Python
 FROM python:3.8
 
-# Installe git
-RUN apt-get update && apt-get install -y git
-
-# Définit le répertoire de travail dans le conteneur
+# Set the working directory in the container
 WORKDIR /app
 
-# Clone le dépôt GitHub contenant ton application Flask
-RUN git clone https://github.com/AbouDjafar/MoIRe.git
+# Copy the application files into the working directory
+COPY . /app
 
-# Déplace-toi dans le répertoire de l'application
-WORKDIR /app/MoIRe
-
-# Installe les dépendances
-RUN pip install --upgrade pip
+# Install the application dependencies
 RUN pip install -r requirements.txt
 
-# Définit les variables d'environnement
-ENV FLASK_APP=app.py
-ENV FLASK_RUN_HOST=0.0.0.0
-
-# Expose le port sur lequel l'application Flask écoute
 EXPOSE 5000
 
-# Lance l'application Flask
+# Define the entry point for the container
 CMD ["flask", "run", "--host=0.0.0.0"]
