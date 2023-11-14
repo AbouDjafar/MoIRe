@@ -10,7 +10,7 @@ Project MoIRe : Mosaic Image Revealer
 import sys
 from PIL import Image
 import random
-from flask import Flask, request, send_file, render_template, send_from_directory, current_app
+from flask import Flask, request, send_file, render_template
 
 def ImageLoader(ImgURI):
     try:
@@ -69,17 +69,40 @@ def creationImage(imageDeBase, bloc, position_bloc, portions, nom):
     #print("image enregistrée!")
     return imageDeBase
 
+import os
 def creationImageEnPuzzle(image, nbr_lignes, nbr_colonnes):
     blocs, portions = decoupageEnBlocs(image, nbr_lignes, nbr_colonnes)    
     imageDeBase = Image.new('RGB', image.size)
     k = 1
     liste_ordinaire = range(0, len(blocs), 1)
-    liste_desordonnee = random.sample(liste_ordinaire, len(liste_ordinaire))
+    liste_desordonnee = random.sample(liste_ordinaire, len(liste_ordinaire))    
+    output_directory = 'templates/output/'
+    os.makedirs(output_directory, exist_ok=True)
     for i in liste_desordonnee:
         creationImage(imageDeBase, blocs[i][1], blocs[i][0], portions, "templates/output/jour {}.jpg".format(k))
         k = k+1   
     liste_images = ["templates/output/jour {}.jpg".format(i+1) for i in liste_ordinaire]
     return liste_images
+
+import cv2
+import numpy as np
+def detect_faces(file):
+    # Charger le fichier cascade pour la détection des visages
+    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+
+    # Lire le fichier en tant qu'image avec OpenCV
+    file_data = np.fromstring(file.read(), np.uint8)
+    image = cv2.imdecode(file_data, cv2.IMREAD_UNCHANGED)
+    #image = cv2.imdecode(np.fromstring(file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
+
+    # Convertir l'image en niveaux de gris
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+    # Détecter les visages dans l'image
+    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+
+    # Renvoyer True s'il y a au moins un visage détecté, sinon False
+    return len(faces) > 0
 
     
 """------------- test ----------------------------------------------------------
@@ -101,17 +124,25 @@ def home():
 @app.route('/show', methods=['POST'])
 def show_out():
     print("it's show out!")
+    import shutil
+    output_directory = 'templates/output/'
+    # Vérifier si le dossier existe
+    if os.path.exists(output_directory):
+        # Supprimer tous les fichiers et dossiers contenus dans le dossier output
+        shutil.rmtree(output_directory)
     img = ImageLoader(request.files['file'])
     #logging.info(f'Fichier reçu : {img.filename}')
     lignesColonnes = int(request.form['subdivisions'])
     #logging.info('lignesColonnes = ',lignesColonnes)
     images_puzzle = creationImageEnPuzzle(img, lignesColonnes, lignesColonnes)
     num_img = len(images_puzzle)
-    
+    #file = request.files['file']
+    #if (detect_faces(file)):
     return render_template('result.html', num_images=num_img, chemins = images_puzzle)
+    #else:
+    #    return render_template('badThing.html')
 
 import zipfile
-import os
 import io
 
 @app.route('/download', methods=['GET', 'POST'])
