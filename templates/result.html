@@ -162,10 +162,20 @@
     <span id="num_img" style="display: none;">
       {{num_images}}
     </span>
-    <div id="grille_images" class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5">
+    <div id="grille_images" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
       {% for chemin in chemins %}
-        <img class='card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg' style='margin: 15px;' src="{{chemin}}" >
-        <a href="{{ url_for('download', filename=chemin) }}">Télécharger l'image</a>
+        <div class="col">
+          <div class="card shadow-sm">
+            <img style='margin: 15px;' src="{{chemin}}" >
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center">
+                <a href="{{ url_for('download', filename=chemin) }}">
+                  <button class="btn btn-md btn-outline-secondary" type="button">Télécharger l'image</button>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
       {% endfor %}
     </div>
     <hr class="featurette-divider">
